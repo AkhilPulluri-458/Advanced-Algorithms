@@ -5,9 +5,11 @@
 std::vector<int> twoSum(std::vector<int>& nums, int target)
 {
     std::unordered_map<int, int> given_num;
-    for (int i = 0; i < nums.size(); i++) {
+    for (int i = 0; i < nums.size(); i++)
+{
         int complement = target - nums[i];
-        if (given_num.find(complement) != given_num.end()) {
+        if (given_num.find(complement) != given_num.end())
+{
             return {given_num[complement], i};
         }
         given_num[nums[i]] = i;
@@ -15,7 +17,8 @@ std::vector<int> twoSum(std::vector<int>& nums, int target)
     return {};
 }
 
-int main() {
+int main()
+{
     int n, target;
 
     // Get the size of the array
