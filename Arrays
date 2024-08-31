@@ -21,7 +21,7 @@ int main()
 {
     int n, target;
 
-    // Get the size of the array
+    // size of the array
     std::cout << "Enter the number of elements in the array:";
     std::cin >> n;
 
