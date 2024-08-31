@@ -1,0 +1,32 @@
+    int n, target;
+
+    // Get the size of the array
+    std::cout << "Enter the number of elements in the array:";
+    std::cin >> n;
+
+    std::vector<int> nums(n);
+
+    // Get the elements of the array
+    std::cout << "Enter the elements of the array: ";
+    for (int i = 0; i < n; i++)
+    {
+        std::cin >> nums[i];
+    }
+
+    // target value
+    std::cout << "Enter the target value: ";
+    std::cin >> target;
+
+    // two indices
+    std::vector<int> result = twoSum(nums, target);
+
+    if (!result.empty()) 
+    {
+        std::cout << "Indices: " << result[0] << ", " << result[1] << std::endl;
+    } 
+    else
+    {
+        std::cout << "solution not found." << std::endl;
+    }
+
+    return 0;
