@@ -1,3 +1,21 @@
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+
+std::vector<int> twoSum(std::vector<int>& nums, int target)
+{
+    std::unordered_map<int, int> given_num;
+    for (int i = 0; i < nums.size(); i++) {
+        int complement = target - nums[i];
+        if (given_num.find(complement) != given_num.end()) {
+            return {given_num[complement], i};
+        }
+        given_num[nums[i]] = i;
+    }
+    return {};
+}
+
+int main() {
     int n, target;
 
     // Get the size of the array
@@ -30,3 +48,4 @@
     }
 
     return 0;
+}
