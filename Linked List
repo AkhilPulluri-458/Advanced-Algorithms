@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+// Defining a node structure for linked list
+struct Node 
+{
+    int row;
+    int col;
+    int value;
+    Node* next;
+};
+//defining a node 
+Node* createNode(int row, int col, int value)
+{
+    Node* newNode = new Node();
+    newNode->row = row;
+    newNode->col = col;
+    newNode->value = value;
+    newNode->next = nullptr;
+    return newNode;
+}
+// Function to insert a node at the end of the linked list
+void insertNode(Node*& head, int row, int col, int value) 
+{
+    Node* newNode = createNode(row, col, value);
+    if (head == nullptr) 
+    {
+        head = newNode;
+    }
+    else
+    {
+        Node* temp = head;
+        while (temp->next != nullptr) 
+        {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+void displayList(Node* head) 
+{
+    Node* temp = head;
+    while (temp != nullptr) 
+    {
+    cout << "[" << temp->row << " " << temp->col << " " << temp->value << "]";
+        temp = temp->next;
+        if (temp != nullptr)
+            cout << " -> ";
+    }
+    cout << " -> NULL" << endl;
+}
+
+int main() 
+{
+    // Sparse matrix
+    int sparseMatrix[4][5] =
+    {
+        {0, 0, 3, 0, 4},
+        {0, 0, 5, 7, 0},
+        {0, 0, 0, 0, 0},
+        {0, 2, 6, 0, 0}
+    };
+    Node* head = nullptr; 
+    // Traverse the sparse matrix and insert non-zero elements into the linked list
+    for (int i = 0; i < 4; i++) 
+    {
+        for (int j = 0; j < 5; j++) 
+        {
+            if (sparseMatrix[i][j] != 0) 
+            {
+                insertNode(head, i, j, sparseMatrix[i][j]);
+            }
+        }
+    }
+    //output (Linked list)
+    cout << "Linked List Representation of Sparse Matrix:" << endl;
+    displayList(head);
+    return 0;
+}
