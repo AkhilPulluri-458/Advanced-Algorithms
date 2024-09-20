@@ -1,0 +1,93 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <limits>
+#include <algorithm>
+
+using namespace std;
+
+const int INF = numeric_limits<int>::max();
+
+struct Node {
+    int index;
+    int distance;
+
+    Node(int index, int distance) : index(index), distance(distance) {}
+
+    bool operator<(const Node& other) const {
+        return distance > other.distance;
+    }
+};
+
+void dijkstra(const vector<vector<int>>& graph, int source, vector<int>& distances, vector<int>& parent) {
+    int n = graph.size();
+
+    distances.resize(n, INF);
+    parent.resize(n, -1);
+
+    priority_queue<Node> pq;
+    pq.push(Node(source, 0));
+    distances[source] = 0;
+
+    while (!pq.empty()) {
+        Node current = pq.top();
+        pq.pop();
+
+        for (int i = 0; i < n; ++i) {
+            if (graph[current.index][i] != 0 && distances[current.index] + graph[current.index][i] < distances[i]) {
+                distances[i] = distances[current.index] + graph[current.index][i];
+                parent[i] = current.index;
+                pq.push(Node(i, distances[i]));
+            }
+        }
+    }
+}
+
+vector<int> reconstructPath(const vector<int>& parent, int source, int destination) {
+    vector<int> path;
+    int current = destination;
+    while (current != source) {
+        path.push_back(current);
+        current = parent[current];
+    }
+    path.push_back(source);
+    reverse(path.begin(), path.end());
+    return path;
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of nodes: ";
+    cin >> n;
+
+    vector<vector<int>> graph(n, vector<int>(n, 0));
+    cout << "Enter the adjacency matrix:\n";
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> graph[i][j];
+        }
+    }
+
+    int source, destination;
+    cout << "Enter the source node: ";
+    cin >> source;
+    cout << "Enter the destination node: ";
+    cin >> destination;
+
+    vector<int> distances, parent;
+    dijkstra(graph, source, distances, parent);
+
+    if (distances[destination] == INF) {
+        cout << "No path exists between the source and destination.\n";
+    } else {
+        cout << "Shortest path distance: " << distances[destination] << endl;
+        vector<int> path = reconstructPath(parent, source, destination);
+        cout << "Shortest path: ";
+        for (int node : path) {
+            cout << node << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
