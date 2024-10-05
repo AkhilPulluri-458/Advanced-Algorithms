@@ -1,0 +1,72 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <map>
+#include <algorithm>
+using namespace std;
+struct Node 
+{
+    char character;
+    int frequency;
+    Node* left;
+    Node* right;
+    Node(char character, int frequency) : character(character), frequency(frequency), left(nullptr), right(nullptr) {}
+};
+struct CompareNodes 
+{
+    bool operator()(const Node* a, const Node* b) 
+    {
+        return a->frequency > b->frequency;
+    }
+};
+void encode(Node* node, string code, map<char, string>& huffmanCodes);
+void buildHuffmanTree(priority_queue<Node*, vector<Node*>, CompareNodes>& minHeap, map<char, string>& huffmanCodes) 
+{
+    while (minHeap.size() > 1) 
+    {
+        Node* node1 = minHeap.top();
+        minHeap.pop();
+        Node* node2 = minHeap.top();
+        minHeap.pop();
+        Node* newNode = new Node('\0', node1->frequency + node2->frequency);
+        newNode->left = node1;
+        newNode->right = node2;
+        minHeap.push(newNode);
+    }
+    Node* root = minHeap.top();
+    huffmanCodes.clear();
+    encode(root, "", huffmanCodes);
+}
+void encode(Node* node, string code, map<char, string>& huffmanCodes)
+{
+    if (node->left == nullptr && node->right == nullptr) 
+    {
+        huffmanCodes[node->character] = code;
+        return;
+    }
+    encode(node->left, code + "0", huffmanCodes);
+    encode(node->right, code + "1", huffmanCodes);
+}
+int main() {
+    string S = "abcdef";
+    vector<int> f = {5, 9, 12, 13, 16, 45};
+    vector<pair<char, int>> charFreqPairs;
+    for (int i = 0; i < S.size(); ++i) 
+    {
+        charFreqPairs.push_back({S[i], f[i]});
+    }
+    sort(charFreqPairs.begin(), charFreqPairs.end(), [](const pair<char, int>& a, const pair<char, int>& b) {
+        return a.second < b.first;
+    });
+    priority_queue<Node*, vector<Node*>, CompareNodes> minHeap;
+    for (const auto& pair : charFreqPairs) {
+        minHeap.push(new Node(pair.first, pair.second));
+    }
+    map<char, string> huffmanCodes;
+    buildHuffmanTree(minHeap, huffmanCodes);
+    for (const auto& pair : charFreqPairs) {
+        cout << huffmanCodes[pair.first] << " ";
+    }
+    cout << endl;
+    return 0;
+}
